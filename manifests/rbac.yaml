@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: example-aws-anywhere
+  namespace: aws-test
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: example-aws-anywhere
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - secrets
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+- apiGroups:
+  - "apps"
+  resources:
+  - replicasets
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: example-aws-anywhere
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: example-aws-anywhere
+subjects:
+- kind: ServiceAccount
+  name: example-aws-anywhere
+  namespace: aws-test

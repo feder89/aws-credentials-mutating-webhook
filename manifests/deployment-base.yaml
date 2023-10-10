@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-aws-anywhere
+  namespace: aws-test
+spec:
+  selector:
+    matchLabels:
+      # IMPORTANT
+      app: example-aws-anywhere
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # IMPORTANT
+        app: example-aws-anywhere
+    spec:
+      serviceAccountName: example-aws-anywhere
+      containers:
+      - name: example-aws-anywhere
+        image: IMG
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: tls
+          # the tls certificates automatically get mounted into the correct path
+          mountPath: "/tmp/k8s-webhook-server/serving-certs"
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: tls
+          secret:
+            secretName: example-aws-anywhere-tls
+            optional: false

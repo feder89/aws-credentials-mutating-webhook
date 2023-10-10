@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: s3-echoer
+  annotations:
+    aws.example.net/trust-anchor-arn: arn:aws:rolesanywhere:eu-central-1:xxxxxxxxxxxx:trust-anchor/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    aws.example.net/profile-arn: arn:aws:rolesanywhere:eu-central-1:xxxxxxxxxxxx:profile/f0571e17-7f9e-472e-bf12-864e2866778b
+    aws.example.net/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/ExampleAnywhereRole
+spec:
+  template:
+    spec:
+      metadata:
+      containers:
+      - name: main
+        image: amazonlinux:2018.03
+        command:
+        - "sh"
+        - "-c"
+        - "curl -sL -o /s3-ops https://github.com/feder89/s3-ops/releases/download/1.0.0/s3-ops-linux && chmod +x /s3-ops && echo This is an in-cluster test | /s3-ops example-aws-anywhere"
+        env:
+        - name: AWS_DEFAULT_REGION
+          value: "eu-central-1"
+        - name: ENABLE_IRP
+          value: "true"
+      restartPolicy: Never

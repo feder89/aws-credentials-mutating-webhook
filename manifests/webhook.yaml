@@ -1,0 +1,38 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: example-aws-anywhere
+  annotations:
+    # IMPORTANT: has to match Certificate namespace.name
+    cert-manager.io/inject-ca-from: aws-test/example-aws-anywhere
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      # has to match the service we created
+      namespace: aws-test
+      name: example-aws-anywhere
+      port: 9443
+      path: "/mutate"
+  failurePolicy: Fail
+  name: example.anywhere.aws
+  namespaceSelector:
+    matchExpressions:
+      - key: scope
+        operator: In
+        values: ["aws-anywhere"]
+  rules:
+  - apiGroups:
+    - ""
+    - "apps"
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+    - replicasets
+    scope: Namespaced
+  sideEffects: None

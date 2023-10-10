@@ -1,0 +1,38 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: aws-issuer
+  namespace: aws-test
+spec:
+  selfSigned: {}
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: example-aws-anywhere
+  namespace: aws-test
+spec:
+  secretName: example-aws-anywhere-tls
+  dnsNames:
+    - example-aws-anywhere
+    - example-aws-anywhere.aws-test.svc
+    - example-aws-anywhere.aws-test.svc.cluster1.local
+  usages:
+    - digital signature
+    - server auth
+    - client auth
+  subject:
+    countries:
+      - IT
+    organizations:
+      - Example S.r.l.
+    localities:
+      - Rome
+    provinces:
+      - Lazio
+    organizationalUnits:
+      - Example Infrastructure 
+  issuerRef:
+    name: aws-issuer

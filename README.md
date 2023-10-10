@@ -24,7 +24,7 @@ The Webhook server must start up using a Certificate issued by the same CA used 
                         "s3:ListBucket"
                     ],
                     "Resource": [
-                        "arn:aws:s3:::onetag-aws-anywhere"
+                        "arn:aws:s3:::example-aws-anywhere"
                     ]
                 },
                 {
@@ -32,7 +32,7 @@ The Webhook server must start up using a Certificate issued by the same CA used 
                     "Effect": "Allow",
                     "Action": "s3:*Object",
                     "Resource": [
-                        "arn:aws:s3:::onetag-aws-anywhere/*"
+                        "arn:aws:s3:::example-aws-anywhere/*"
                     ]
                 }
             ]

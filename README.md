@@ -93,6 +93,11 @@ make docker-build docker-push IMG=<some-registry>/aws-credentials-mutating-webho
 make deploy IMG=<some-registry>/aws-credentials-mutating-webhook:tag
 ```
 
+3. deploy example container (k8s job):
+```sh
+make example-deploy
+```
+
 ### Undeploy Webhook
 UnDeploy the webhook resources from the cluster:
 

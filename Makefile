@@ -92,3 +92,7 @@ undeploy:
 .PHONY: prep-config
 prep-config:
 	cat manifests/deployment-base.yaml | sed -e "s|IMG|${IMG}|g" | tee manifests/deployment.yaml
+
+.PHONY: deploy-example
+deploy-example:
+	kubectl apply -f example/job-s3-ops.yaml 
